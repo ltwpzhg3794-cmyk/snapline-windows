@@ -6,9 +6,9 @@
 - 鼠标进入展开区域后，移出即收起（检测周期约 80 毫秒），不再等待 0.7 秒或临时显示倒计时。
 - 托盘首次展开仍预留鼠标移入时间；固定显示和编辑、拖动等交互保护保留。
 
-[下载修改后便携版](Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip) · [下载修改后源码包](Snapline-Windows-0.5.3-hover-fix-20261023-source.zip) · [测试记录](tests/hover-fix-20261023-results.txt) · [SHA-256 校验值](SHA256-hover-fix-20261023.txt)
+[下载修改后便携版](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip) · [下载修改后源码包](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-source.zip) · [测试记录](tests/hover-fix-20261023-results.txt) · [SHA-256 校验值](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/SHA256-hover-fix-20261023.txt)
 
-便携版中的程序与本次本地安装版本一致。先退出旧版，再解压替换程序；保留自己的 Data 目录和目录链接。备份包不包含截图、便签、用户设置或日志。源码包可在 Windows 使用 build.ps1 编译。以下旧版本下载和更新说明保留供参考。
+便携版中的程序与本次本地安装版本一致。先退出旧版，再解压替换程序；保留自己的 Data 目录和目录链接。备份包不包含截图、便签、用户设置或日志。源码包可在 Windows 使用 build.ps1 编译。下方保留历史更新说明供参考。
 
 
 0.5.3 新增开机启动：首次正常运行（包括旧版升级）自动为当前 Windows 用户启用，下次登录后收起运行。托盘「开机启动」可取消并记住选择。保留下述顶部蓝线展开修复。
@@ -23,13 +23,13 @@
 
 ## 下载
 
-[Windows 便携版 0.5.3](https://github.com/TE1233/snapline-windows/releases/download/v0.5.3/Snapline-Windows-0.5.3-portable.zip) · [源码包 0.5.3](https://github.com/TE1233/snapline-windows/releases/download/v0.5.3/Snapline-Windows-0.5.3-source.zip)
+[Windows 便携版 0.5.3 悬停修正版](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip) · [源码包 0.5.3 悬停修正版](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-source.zip)
 
-GitHub 下载不畅时，可尝试 [备用加速下载 1](https://ghfast.top/https://github.com/TE1233/snapline-windows/releases/download/v0.5.3/Snapline-Windows-0.5.3-portable.zip) · [备用加速下载 2](https://gh-proxy.com/https://github.com/TE1233/snapline-windows/releases/download/v0.5.3/Snapline-Windows-0.5.3-portable.zip)。
+GitHub 下载不畅时，可尝试 [备用加速下载 1](https://ghfast.top/https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip) · [备用加速下载 2](https://gh-proxy.com/https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip)。
 
 这两个入口无需注册，通过第三方服务转发 GitHub 原始发布文件。服务可用性可能变化；一个入口打不开时可尝试另一个。
 
-便携包 SHA-256：`d2fc362fa3cef42daf2f39298a736287b040acfc2a41cf785b60e9086672683e`
+便携包 SHA-256：`e418ac93900243fd16cc5e1b106ff543eaa8b9468a09a73d7e18b278b375abe1`
 
 完整解压便携版后，双击 Snapline.exe 即可运行。
 
