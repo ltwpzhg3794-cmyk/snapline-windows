@@ -36,3 +36,7 @@
 !/Snapline-Windows-0.5.3-source.zip
 !/tests/startup-results.txt
 !/tests/release-0.5.3-results.txt
+
+!/Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip
+!/Snapline-Windows-0.5.3-hover-fix-20261023-source.zip
+!/tests/hover-fix-20261023-results.txt

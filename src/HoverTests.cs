@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -31,20 +31,36 @@ namespace Snapline
             foreach (double scale in new[] { 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0 })
             {
                 var gate = new TopHoverGate();
-                int y = bounds.Top + (int)Math.Ceiling(4 * scale) - 1;
+                int y = bounds.Top + (int)Math.Ceiling(2 * scale) - 1;
                 Require(!gate.Observe("A", bounds, -960, y, scale, time), "Opened without dwell.");
                 Require(!gate.Observe("A", bounds, -960, y, scale, time.AddMilliseconds(160)), "Opened too soon.");
                 Require(gate.Observe("A", bounds, -960, y, scale, time.AddMilliseconds(240)), "Visible indicator failed at DPI " + scale);
             }
+            foreach (double scale in new[] { 1.0, 1.25, 1.5, 2.0, 3.0 })
+            {
+                int start = bounds.Left + (int)Math.Round((bounds.Width - 68 * scale) / 2);
+                int end = start + (int)Math.Round(68 * scale);
+                foreach (int x in new[] { bounds.Left, start - 1, end, bounds.Right - 1 })
+                {
+                    var outside = new TopHoverGate();
+                    outside.Observe("A", bounds, x, bounds.Top, scale, time);
+                    Require(!outside.Observe("A", bounds, x, bounds.Top, scale, time.AddMilliseconds(500)), "Opened outside indicator at " + x);
+                }
+                var below = new TopHoverGate();
+                int belowY = bounds.Top + TopHoverGate.TriggerHeight(scale);
+                below.Observe("A", bounds, -960, belowY, scale, time);
+                Require(!below.Observe("A", bounds, -960, belowY, scale, time.AddMilliseconds(500)), "Opened below indicator.");
+            }
+            report.Add("PASS: top edge outside indicator and pixels below indicator do not open at multiple DPI scales");
             var jitter = new TopHoverGate();
-            jitter.Observe("A", bounds, -960, bounds.Top + 8, 1, time);
-            jitter.Observe("A", bounds, -960, bounds.Top + 14, 1, time.AddMilliseconds(80));
-            jitter.Observe("A", bounds, -960, bounds.Top + 8, 1, time.AddMilliseconds(160));
-            Require(jitter.Observe("A", bounds, -960, bounds.Top + 8, 1, time.AddMilliseconds(240)), "Small pointer jitter lost dwell.");
-            Require(!jitter.Observe("B", bounds, -960, bounds.Top + 8, 1, time.AddMilliseconds(320)), "Monitor change reused stale dwell.");
-            Require(jitter.Observe("B", bounds, -960, bounds.Top + 8, 1, time.AddMilliseconds(560)), "Second monitor could not open.");
+            jitter.Observe("A", bounds, -960, bounds.Top + 1, 1, time);
+            jitter.Observe("A", bounds, -960, bounds.Top + 4, 1, time.AddMilliseconds(80));
+            jitter.Observe("A", bounds, -960, bounds.Top + 1, 1, time.AddMilliseconds(160));
+            Require(jitter.Observe("A", bounds, -960, bounds.Top + 1, 1, time.AddMilliseconds(240)), "Small pointer jitter lost dwell.");
+            Require(!jitter.Observe("B", bounds, -960, bounds.Top + 1, 1, time.AddMilliseconds(320)), "Monitor change reused stale dwell.");
+            Require(jitter.Observe("B", bounds, -960, bounds.Top + 1, 1, time.AddMilliseconds(560)), "Second monitor could not open.");
             jitter.Observe("B", bounds, -960, bounds.Top + 50, 1, time.AddMilliseconds(640));
-            Require(!jitter.Observe("B", bounds, -960, bounds.Top + 8, 1, time.AddMilliseconds(720)), "Leaving edge did not reset dwell.");
+            Require(!jitter.Observe("B", bounds, -960, bounds.Top + 1, 1, time.AddMilliseconds(720)), "Leaving edge did not reset dwell.");
             var work = new Rectangle(0, 48, 1920, 1032);
             var taskbar = new TopHoverGate();
             Require(!taskbar.Observe("A", work, 960, 0, 1, time), "Trigger ignored working-area origin.");
@@ -83,12 +99,19 @@ namespace Snapline
                     {
                         Require(shelf.ActualHeight <= 8, "Initial shelf did not collapse.");
                         focus = Native.GetForegroundWindow();
-                        move(area.Left + area.Width / 2, area.Top + 8);
+                        move(area.Left + 10, area.Top + 1);
                         phase = 2; phaseStart = DateTime.Now;
                     }
                     else if (phase == 2 && (DateTime.Now - phaseStart).TotalMilliseconds > 600)
                     {
-                        Require(shelf.ActualHeight > 200, "Actual hover near indicator failed on desktop.");
+                        Require(shelf.ActualHeight <= 8, "Top edge outside indicator opened shelf.");
+                        report.Add("PASS: actual cursor at top edge outside indicator does not open shelf");
+                        move(area.Left + area.Width / 2, area.Top + 1);
+                        phase = 20; phaseStart = DateTime.Now;
+                    }
+                    else if (phase == 20 && (DateTime.Now - phaseStart).TotalMilliseconds > 600)
+                    {
+                        Require(shelf.ActualHeight > 200, "Actual hover on indicator failed on desktop.");
                         Require(Native.GetForegroundWindow() == focus, "Hover stole keyboard focus.");
                         report.Add("PASS: actual cursor hover near blue indicator opens over desktop without stealing keyboard focus");
                         shelf.ToggleFromTray();
@@ -109,13 +132,14 @@ namespace Snapline
                     {
                         Require(shelf.ActualHeight > 200, "Hover did not resume after fullscreen ended.");
                         report.Add("PASS: fullscreen suppresses accidental opening; returning to desktop resumes hover without moving pointer away");
+                        typeof(Shelf).GetField("keepUntil", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(shelf, DateTime.Now.AddSeconds(7));
                         move(area.Left + area.Width / 2, area.Bottom - 80);
                         phase = 5; phaseStart = DateTime.Now;
                     }
-                    else if (phase == 5 && (DateTime.Now - phaseStart).TotalMilliseconds > 4100)
+                    else if (phase == 5 && (DateTime.Now - phaseStart).TotalMilliseconds > 200)
                     {
                         Require(shelf.ActualHeight <= 8, "Leaving hover shelf did not auto-collapse.");
-                        report.Add("PASS: automatic collapse after leaving remains intact");
+                        report.Add("PASS: leaving collapses within 300 ms even with seven seconds of initial display grace remaining");
                         exit = 0; timer.Stop(); shelf.Close();
                     }
                 }

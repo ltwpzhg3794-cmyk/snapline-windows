@@ -303,7 +303,7 @@ namespace Snapline
         IntPtr handle;
         HwndSource source;
         Forms.Screen screen;
-        bool expanded, pinned, dragging, dialogOpen, shuttingDown;
+        bool expanded, pinned, dragging, dialogOpen, shuttingDown, pointerWasInside;
         DateTime keepUntil, hideUntil, lastInside;
         readonly TopHoverGate hoverGate = new TopHoverGate();
         internal Func<IntPtr> ForegroundWindow = Native.GetForegroundWindow;
@@ -462,7 +462,7 @@ namespace Snapline
                 return;
             }
             if ((imageTip != null && imageTip.IsOpen) || (noteTip != null && noteTip.IsOpen)) { lastInside = now; return; }
-            if (now < hideUntil) hoverGate.Reset();
+            if (now < hideUntil || screen.DeviceName != under.DeviceName) hoverGate.Reset();
             else if (hoverGate.Observe(under.DeviceName, area, p.X, p.Y, screen.DeviceName == under.DeviceName ? Dpi() : 1, now) &&
                 (!expanded || screen.DeviceName != under.DeviceName))
             {
@@ -471,13 +471,15 @@ namespace Snapline
             }
             bool inside = expanded && p.X >= screen.WorkingArea.Left && p.X < screen.WorkingArea.Right &&
                 p.Y >= screen.WorkingArea.Top && p.Y < screen.WorkingArea.Top + 266 * Dpi();
-            if (inside) lastInside = now;
-            if (expanded && !pinned && now > keepUntil && (now - lastInside).TotalMilliseconds > 700) Collapse(false);
+            if (inside) { lastInside = now; pointerWasInside = true; }
+            // Initial tray/startup grace permits entering the shelf; leaving it never waits.
+            if (expanded && !pinned && !inside && (pointerWasInside || now > keepUntil)) Collapse(false);
             if (toast != "" && now > toastUntil) { toast = ""; Render(); }
         }
         internal void Reveal()
         {
             bool was = expanded;
+            if (!was) pointerWasInside = false;
             var target = ScreenUnderPointer();
             bool moved = screen == null || target.DeviceName != screen.DeviceName;
             expanded = true;
@@ -924,8 +926,8 @@ namespace Snapline
             canvas.Children.Clear();
             if (!expanded)
             {
-                var mark = new Border { Width = 68, Height = 2, CornerRadius = new CornerRadius(1), Background = Brush("#D671C6FA"), ToolTip = "鼠标在蓝线附近稍停即可展开 · 图片旁「操作提示」查看说明" };
-                Place(mark, Math.Max(0, (shelfWidth - 68) / 2), 0);
+                var mark = new Border { Width = TopHoverGate.IndicatorWidth, Height = TopHoverGate.IndicatorHeight, CornerRadius = new CornerRadius(1), Background = Brush("#D671C6FA"), ToolTip = "鼠标停在蓝线上即可展开 · 图片旁「操作提示」查看说明" };
+                Place(mark, Math.Max(0, (shelfWidth - TopHoverGate.IndicatorWidth) / 2), 0);
                 return;
             }
             page = Math.Min(page, Math.Max(0, (Deck().Count - 1) / CardsPerPage()));

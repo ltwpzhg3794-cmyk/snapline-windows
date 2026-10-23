@@ -4,20 +4,23 @@ using System.Text;
 
 namespace Snapline
 {
-    // Uses physical desktop coordinates. A slightly wider band avoids missing the visible line.
+    // Uses physical desktop coordinates matching the visible collapsed indicator.
     sealed class TopHoverGate
     {
         string monitor;
         int top, left;
         DateTime entered, lastSeen;
         internal const int DwellMilliseconds = 200;
-        internal static int TriggerHeight(double dpi) { return Math.Max(12, (int)Math.Ceiling(8 * Math.Max(1, dpi))); }
+        internal const int IndicatorWidth = 68, IndicatorHeight = 2;
+        internal static int TriggerHeight(double dpi) { return (int)Math.Ceiling(IndicatorHeight * Math.Max(1, dpi)); }
         internal void Reset() { monitor = null; entered = lastSeen = DateTime.MinValue; }
         internal bool Observe(string device, Rectangle area, int x, int y, double dpi, DateTime now)
         {
             int band = TriggerHeight(dpi);
             bool same = monitor == device && top == area.Top && left == area.Left;
-            bool horizontal = x >= area.Left && x < area.Right;
+            double width = IndicatorWidth * Math.Max(1, dpi);
+            int start = area.Left + (int)Math.Round(Math.Max(0, (area.Width - width) / 2));
+            bool horizontal = x >= start && x < Math.Min(area.Right, start + (int)Math.Round(width));
             bool inside = horizontal && y >= area.Top && y < area.Top + band;
             if (!inside)
             {

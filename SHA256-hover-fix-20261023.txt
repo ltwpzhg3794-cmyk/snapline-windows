@@ -1,0 +1,2 @@
+e418ac93900243fd16cc5e1b106ff543eaa8b9468a09a73d7e18b278b375abe1  Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip
+8176e546fab50b1b74c0af37c4ba4e1b675d1cfc7b1992e1d36a9193df1f7d71  Snapline-Windows-0.5.3-hover-fix-20261023-source.zip

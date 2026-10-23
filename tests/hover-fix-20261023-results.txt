@@ -1,0 +1,8 @@
+﻿PASS: desktop and framed/maximized apps are allowed; genuine borderless fullscreen still suppresses hover
+PASS: top edge outside indicator and pixels below indicator do not open at multiple DPI scales
+PASS: 100/125/150/175/200/250/300 percent scaling geometry, negative origins, taskbar offsets, jitter and monitor dwell reset
+PASS: actual Windows desktop window is excluded from fullscreen suppression
+PASS: actual cursor at top edge outside indicator does not open shelf
+PASS: actual cursor hover near blue indicator opens over desktop without stealing keyboard focus
+PASS: fullscreen suppresses accidental opening; returning to desktop resumes hover without moving pointer away
+PASS: leaving collapses within 300 ms even with seven seconds of initial display grace remaining
