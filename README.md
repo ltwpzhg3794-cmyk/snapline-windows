@@ -1,12 +1,15 @@
 # 截图晾台 Snapline — Windows 版
 
-## 2026-10-23 悬停交互修正版（基于 0.5.3）
+## 2026-10-31 截图标注图标版（基于 0.5.3）
 
-- 只有鼠标停在当前显示器顶部蓝色短条上约 0.2 秒才会展开；顶部其他位置不触发。
+- 框选后在选区旁显示深色圆角图标工具栏，悬停图标可查看说明；不再弹出独立标注窗口。
+- 支持原地输入中文和多行文字、自由画笔、椭圆圈选、撤销及重新框选。
+- 选中工具显示绿色状态，颜色和粗细按需展开；红色叉号取消，绿色对勾完成。
+- 保留此前的悬停修复：只有鼠标停在当前显示器顶部蓝色短条上约 0.2 秒才会展开；顶部其他位置不触发。
 - 鼠标进入展开区域后，移出即收起（检测周期约 80 毫秒），不再等待 0.7 秒或临时显示倒计时。
 - 托盘首次展开仍预留鼠标移入时间；固定显示和编辑、拖动等交互保护保留。
 
-[下载修改后便携版](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip) · [下载修改后源码包](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-source.zip) · [测试记录](tests/hover-fix-20261023-results.txt) · [SHA-256 校验值](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/SHA256-hover-fix-20261023.txt)
+[下载修改后便携版](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-icon-ui-20261031/Snapline-Windows-0.5.3-icon-ui-20261031-portable.zip) · [下载修改后源码包](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-icon-ui-20261031/Snapline-Windows-0.5.3-icon-ui-20261031-source.zip) · [测试记录](tests/icon-ui-20261031-results.txt) · [SHA-256 校验值](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-icon-ui-20261031/SHA256-icon-ui-20261031.txt)
 
 便携版中的程序与本次本地安装版本一致。先退出旧版，再解压替换程序；保留自己的 Data 目录和目录链接。备份包不包含截图、便签、用户设置或日志。源码包可在 Windows 使用 build.ps1 编译。下方保留历史更新说明供参考。
 
@@ -23,13 +26,13 @@
 
 ## 下载
 
-[Windows 便携版 0.5.3 悬停修正版](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip) · [源码包 0.5.3 悬停修正版](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-source.zip)
+[Windows 便携版 0.5.3 图标版](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-icon-ui-20261031/Snapline-Windows-0.5.3-icon-ui-20261031-portable.zip) · [源码包 0.5.3 图标版](https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-icon-ui-20261031/Snapline-Windows-0.5.3-icon-ui-20261031-source.zip)
 
-GitHub 下载不畅时，可尝试 [备用加速下载 1](https://ghfast.top/https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip) · [备用加速下载 2](https://gh-proxy.com/https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-hover-fix-20261023/Snapline-Windows-0.5.3-hover-fix-20261023-portable.zip)。
+GitHub 下载不畅时，可尝试 [备用加速下载 1](https://ghfast.top/https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-icon-ui-20261031/Snapline-Windows-0.5.3-icon-ui-20261031-portable.zip) · [备用加速下载 2](https://gh-proxy.com/https://github.com/ltwpzhg3794-cmyk/snapline-windows/releases/download/v0.5.3-icon-ui-20261031/Snapline-Windows-0.5.3-icon-ui-20261031-portable.zip)。
 
 这两个入口无需注册，通过第三方服务转发 GitHub 原始发布文件。服务可用性可能变化；一个入口打不开时可尝试另一个。
 
-便携包 SHA-256：`e418ac93900243fd16cc5e1b106ff543eaa8b9468a09a73d7e18b278b375abe1`
+便携包 SHA-256：`d8fb68e923cb3e7413eea26d40e07f355381a6e3466f080ae4cfd8fbd6758d18`
 
 完整解压便携版后，双击 Snapline.exe 即可运行。
 
@@ -37,11 +40,11 @@ GitHub 下载不畅时，可尝试 [备用加速下载 1](https://ghfast.top/htt
 
 ## 使用
 
-运行 dist/Snapline.exe。ZIP 请先完整解压，保留同目录的 Snapline.exe.config。已在本机 Windows 10（10.0.19045）验证，目标为 Windows 10/11 和 .NET Framework 4.8。程序约 140 KB，使用系统运行库，无需另装开发工具。
+运行 dist/Snapline.exe。ZIP 请先完整解压，保留同目录的 Snapline.exe.config。已在本机 Windows 10（10.0.19045）验证，目标为 Windows 10/11 和 .NET Framework 4.8。程序约 160 KB，使用系统运行库，无需另装开发工具。
 
 | 操作 | 效果 |
 | --- | --- |
-| Ctrl+B（默认）或已保存的自定义快捷键 | 拖动框选，松开鼠标后自动挂上晾台并复制图片 |
+| Ctrl+B（默认）或已保存的自定义快捷键 | 拖动框选，松开后可原地标注；点绿色对勾或 Ctrl+Enter 完成，再挂上晾台并复制图片 |
 | 托盘「截图快捷键 → 自定义…」 | 按下组合键，保存并启用；重启后仍有效 |
 | 框选时 Esc 或右键 | 取消，不添加图片，也不改动剪贴板 |
 | 「操作提示」卡片里的截图按钮、托盘截图菜单 | 只截图并复制，不自动挂上晾台 |

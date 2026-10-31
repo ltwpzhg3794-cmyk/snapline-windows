@@ -1,4 +1,4 @@
-﻿// Snapline: a local screenshot shelf for Windows. MIT License.
+// Snapline: a local screenshot shelf for Windows. MIT License.
 // Independent Windows implementation inspired by Tendedero's interaction.
 using System;
 using System.Collections.Generic;
@@ -616,7 +616,7 @@ namespace Snapline
             var title = Text("截图晾台 · 操作提示", 13, "#FF27668F");
             title.FontWeight = FontWeights.SemiBold; title.Margin = new Thickness(0, 0, 0, 10);
             content.Children.Add(title);
-            AddHelpRow(content, CaptureShortcutLabel, ShortcutCollects ? "框选截图，完成后自动挂上" : "在托盘设置截图快捷键");
+            AddHelpRow(content, CaptureShortcutLabel, ShortcutCollects ? "框选后原地标注，点完成自动挂上" : "在托盘设置截图快捷键");
             if (!CaptureHotkeyRegistered && store.Settings.CaptureShortcut != "None")
                 content.Children.Add(new TextBlock { Text = CaptureShortcutLabel + " 已被占用，可在托盘更换", FontSize = 10, Foreground = Brush("#FF9C6A3B"), Margin = new Thickness(0, 0, 0, 7) });
             AddHelpRow(content, "卡片截图按钮", "只复制，不自动挂上晾台");
@@ -714,7 +714,7 @@ namespace Snapline
             dialogOpen = true;
             try
             {
-                Forms.MessageBox.Show("截图晾台 Snapline 0.5.3\n\n" + CaptureShortcutLabel + "：框选截图（需快捷键可用）。\n图片右侧「操作提示」：悬停查看说明，点击内部按钮仅截图并复制。\nWin + Shift + S 和其他软件截图不会自动加入。\nCtrl + Alt + T：展开 / 收起，展开后保持显示。\n双击托盘图标：临时展开，离开后自动收起。\n托盘「固定显示」：勾选保持显示，取消后恢复自动收起。\n托盘「开机启动」：首次运行自动启用，取消后记住；登录 Windows 后收起运行。\n鼠标停在屏幕顶部：临时展开。\n单击图片：复制。双击：查看。\n拖出：复制为文件。按 Shift 拖到文件夹：移动。\n长按图片：用画图编辑。右键：更多操作。\n\n默认 Ctrl+B 或自定义快捷键发起的框选截图会自动加入。微信截图、普通复制图片和外部截图文件夹均不自动收集。\n最多保留 60 张，超过后清理最早的应用副本。\n完全本地运行，不联网、不上传、不修改系统截图设置。", "截图晾台", Forms.MessageBoxButtons.OK, Forms.MessageBoxIcon.Information);
+                Forms.MessageBox.Show("截图晾台 Snapline 0.5.3\n\n" + CaptureShortcutLabel + "：框选截图（需快捷键可用）。\n图片右侧「操作提示」：悬停查看说明，点击内部按钮仅截图并复制。\nWin + Shift + S 和其他软件截图不会自动加入。\nCtrl + Alt + T：展开 / 收起，展开后保持显示。\n双击托盘图标：临时展开，离开后自动收起。\n托盘「固定显示」：勾选保持显示，取消后恢复自动收起。\n托盘「开机启动」：首次运行自动启用，取消后记住；登录 Windows 后收起运行。\n鼠标停在顶部蓝色短条：临时展开，移出立即收起。\n单击图片：复制。双击：查看。\n拖出：复制为文件。按 Shift 拖到文件夹：移动。\n长按图片：用画图编辑。右键：更多操作。\n\n默认 Ctrl+B 或自定义快捷键发起的框选截图会自动加入。微信截图、普通复制图片和外部截图文件夹均不自动收集。\n最多保留 60 张，超过后清理最早的应用副本。\n完全本地运行，不联网、不上传、不修改系统截图设置。", "截图晾台", Forms.MessageBoxButtons.OK, Forms.MessageBoxIcon.Information);
             }
             finally { dialogOpen = false; }
         }
@@ -1253,6 +1253,7 @@ namespace Snapline
             try
             {
                 if (args.Contains("--self-test")) { SelfTest(root); return 0; }
+                if (args.Contains("--inline-test")) return InlineCaptureTests.Run(root,args.Contains("--inline-preview"));
                 if (args.Contains("--integration-test")) return Integration.Run(root);
                 if (args.Contains("--memo-test")) return MemoTests.Run(root);
                 if (args.Contains("--shortcut-test")) return ShortcutTests.Run(root);

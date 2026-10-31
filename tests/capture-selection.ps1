@@ -1,4 +1,4 @@
-﻿param([string]$BinaryPath,[switch]$CustomShortcut)
+param([string]$BinaryPath,[switch]$CustomShortcut)
 $ErrorActionPreference='Stop'
 Add-Type -TypeDefinition @"
 using System;using System.Runtime.InteropServices;using System.Text;
@@ -105,6 +105,10 @@ try{
  $ui=[Drawing.Bitmap]::new(500,320)
  try{$g=[Drawing.Graphics]::FromImage($ui);try{$g.CopyFromScreen($bounds.Left,$bounds.Top,0,0,$ui.Size)}finally{$g.Dispose()};$ui.Save((Join-Path $dataRoot 'selection-ui.png'),[Drawing.Imaging.ImageFormat]::Png)}finally{$ui.Dispose()}
  [void][SnaplineSelectionQA]::PostMessage($overlay,0x202,[IntPtr]::Zero,[IntPtr]::new((($localY+80) -shl 16)-bor ($localX+120)))
+ Pump 300
+ if(@(Get-Items).Count -ne 0){throw 'Releasing the selection completed capture before confirmation.'}
+ $report.Add('PASS: releasing selection keeps the inline annotation surface open without saving')
+ [SnaplineSelectionQA]::keybd_event(0x0D,0,0,[UIntPtr]::Zero);Pump 80;[SnaplineSelectionQA]::keybd_event(0x0D,0,2,[UIntPtr]::Zero)
  Pump 1400
  $lastOwnedSequence=[SnaplineSelectionQA]::GetClipboardSequenceNumber()
  $items=@(Get-Items);if($items.Count -ne 1){throw ('Actual selection did not produce one card: '+$items.Count)}

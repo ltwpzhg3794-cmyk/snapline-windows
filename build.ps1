@@ -1,4 +1,4 @@
-﻿param([string]$OutputDirectory)
+param([string]$OutputDirectory)
 $ErrorActionPreference = 'Stop'
 $projectRoot = $PSScriptRoot
 $framework = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319'
@@ -43,6 +43,8 @@ $arguments = @('/nologo','/target:winexe','/platform:anycpu','/optimize+','/utf8
     ('/win32manifest:' + (Join-Path $projectRoot 'app.manifest')),
     ('/win32icon:' + $iconFile)
 ) + $references + (Join-Path $projectRoot 'src\Snapline.cs'), (Join-Path $projectRoot 'src\Integration.cs'), (Join-Path $projectRoot 'src\RegionCapture.cs'), (Join-Path $projectRoot 'src\Memo.cs'), (Join-Path $projectRoot 'src\Shortcut.cs'), (Join-Path $projectRoot 'src\ShortcutEditor.cs'), (Join-Path $projectRoot 'src\ShortcutTests.cs'), (Join-Path $projectRoot 'src\Hover.cs'), (Join-Path $projectRoot 'src\HoverTests.cs'), (Join-Path $projectRoot 'src\Startup.cs'), (Join-Path $projectRoot 'src\StartupTests.cs')
+$arguments += (Join-Path $projectRoot 'src\SelectionInk.cs'), (Join-Path $projectRoot 'src\InlineCaptureTests.cs')
+$arguments += (Join-Path $projectRoot 'src\CaptureToolbar.cs')
 & $csc @arguments
 if ($LASTEXITCODE -ne 0) { throw '编译失败。' }
 Copy-Item -LiteralPath (Join-Path $projectRoot 'Snapline.exe.config') -Destination $dist -Force

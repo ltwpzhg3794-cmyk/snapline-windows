@@ -1,0 +1,2 @@
+PASS: toolbar stays on screen at edges, negative origins, small selections and 100/125/150/200% DPI.
+PASS: original-size crop, crop-local pen/text/ellipse coordinates, Chinese multiline text, independent colors and unmodified source pixels.
